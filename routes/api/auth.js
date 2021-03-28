@@ -3,25 +3,25 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const connection = require('../../config/db');
 const bcrypt = require('bcrypt');
-const { json } = require('express');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const middleware = require('../../middleware/middleware');
 
-//@route POST api/auth
+//route POST api/auth
+//login user and return token
+//if error send error message(msg) object in msg array
 router.post(
   '/',
   [
-    check('name', 'Name is required').not().isEmpty(),
     check('email', 'Please inculde a valid email').isEmail(),
-    check(
-      'password',
-      'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 }),
+    check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });
     }
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
     try {
       //check user exists
       let sql = `SELECT * FROM user WHERE email = '${email}'`;
@@ -30,24 +30,31 @@ router.post(
           console.log(error);
           res.status(500).send('Server Error');
         }
-        console.log(user.length);
-        // user exists
-        if (user.length > 0) {
-          res.status(400).json({ msg: [{ msg: 'User already exists' }] });
+        // user does not exist
+        if (user.length === 0) {
+          res.status(400).json({ msg: [{ msg: 'Invalid credentials' }] });
         }
-        // does not exist
+        // user exist
         else {
-          const salt = await bcrypt.genSalt(10);
-          const bcryptPassword = await bcrypt.hash(password, salt);
-          console.log(bcryptPassword);
-          sql = `INSERT INTO user (name, email, password) VALUES ('${name}', '${email}', '${bcryptPassword}')`;
-          connection.query(sql, (error2, result) => {
-            if (error2) {
-              console.error(error2);
-              return res.status(500).send('sever error');
-            }
-            res.send('User registered');
-          });
+          const isMatch = await bcrypt.compare(password, user[0].password);
+          if (!isMatch) {
+            res.status(400).json({ msg: [{ msg: 'Invalid credentials' }] });
+          } else {
+            const payload = {
+              user: {
+                id: user[0].userId,
+              },
+            };
+            jwt.sign(
+              payload,
+              config.get('jwtSecret'),
+              { expiresIn: 360000 },
+              (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+              }
+            );
+          }
         }
       });
     } catch (error) {
@@ -55,5 +62,20 @@ router.post(
     }
   }
 );
+
+// @
+router.get('/', middleware, async (req, res) => {
+  try {
+    const sql = `SELECT userId, name, email, date FROM user where userId = ${req.user.id}`;
+    connection.query(sql, (err, user) => {
+      if (err) {
+        throw err;
+      }
+      res.json(user);
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
+});
 
 module.exports = router;

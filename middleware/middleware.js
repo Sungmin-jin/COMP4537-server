@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+//check if user is authenticated or not
 module.exports = function (req, res, next) {
-  // get toke nfrom header
+  // get toke from header
   const token = req.header('x-auth-token');
 
   //check if no token

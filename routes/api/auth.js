@@ -7,9 +7,9 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const middleware = require('../../middleware/middleware');
 
-//route POST api/auth
-//login user and return token
-//if error send error message(msg) object in msg array
+//@route POST api/auth
+//@desc login user and return token
+//formData: email, password
 router.post(
   '/',
   [
@@ -63,7 +63,8 @@ router.post(
   }
 );
 
-// @
+//@route GET api/auth
+//@get the uesr by token
 router.get('/', middleware, async (req, res) => {
   try {
     const sql = `SELECT userId, name, email, date FROM user where userId = ${req.user.id}`;

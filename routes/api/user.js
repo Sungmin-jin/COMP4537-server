@@ -10,7 +10,6 @@ const middleware = require('../../middleware/middleware');
 //Register
 //route POST api/user
 //required form data: name, email, password
-//if error send error message(msg) object in msg array
 router.post(
   '/',
   [

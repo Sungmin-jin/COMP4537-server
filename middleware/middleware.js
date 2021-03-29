@@ -10,7 +10,6 @@ module.exports = function (req, res, next) {
   if (!token) {
     return res.status(401).json({ msg: 'No token is recieved' });
   }
-
   try {
     const decoded = jwt.verify(token, config.get('jwtSecret'));
 

@@ -67,6 +67,8 @@ router.get('/', middleware, (req, res) => {
 router.get('/:id', middleware, (req, res) => {
   try {
     const sql = `SELECT * FROM post where postId =${req.params.id}`;
+    // const sql = `SELECT * FROM post p LEFT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}
+    // UNION SELECT c.commentText, c.commentId, c.userId AS commentUserId, c.commentDate FROM post p RIGHT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

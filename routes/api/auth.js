@@ -17,8 +17,10 @@ router.post(
     check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
+    console.log('login route');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({ msg: errors.array() });
     }
     const { email, password } = req.body;
@@ -72,7 +74,7 @@ router.get('/', middleware, async (req, res) => {
       if (err) {
         throw err;
       }
-      res.json(user);
+      res.json(user[0]);
     });
   } catch (error) {
     console.error(error.message);

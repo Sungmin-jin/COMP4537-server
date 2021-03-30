@@ -13,7 +13,7 @@ router.post(
   (req, res) => {
     const { text, postId } = req.body;
     try {
-      const sql = `INSERT INTO comment (text, postId, userId) VALUES ('${text}', ${postId}, ${req.user.id})`;
+      const sql = `INSERT INTO comment (commentText, postId, userId) VALUES ('${text}', ${postId}, ${req.user.id})`;
       connection.query(sql, (err, result) => {
         if (err) {
           console.log(err);
@@ -49,7 +49,7 @@ router.get('/:id', middleware, (req, res) => {
 router.put('/:id', middleware, (req, res) => {
   try {
     const { text } = req.body;
-    const sql = `UPDATE comment SET text='${text}' WHERE commentId=${req.params.id} AND userId=${req.user.id}`;
+    const sql = `UPDATE comment SET commentText='${text}' WHERE commentId=${req.params.id} AND userId=${req.user.id}`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

@@ -21,14 +21,14 @@ router.post(
       return res.status(400).json({ msg: errors.array() });
     }
     try {
-      const { text, title } = req.body;
+      const { text, title, price } = req.body;
       // const { image } = req.files.pic;
       console.log(req.files);
       const image = null;
-      const sql = `INSERT INTO post (text, title, userId ${
+      const sql = `INSERT INTO post (text, title, userId, price ${
         image ? ',image' : ''
       })
-        VALUES ('${text}', '${title}', ${req.user.id} ${
+        VALUES ('${text}', '${title}', ${req.user.id}, ${price} ${
         image ? ",'" + data + "'" : ''
       })`;
       connection.query(sql, (err, result) => {
@@ -121,8 +121,8 @@ router.delete('/:id', middleware, (req, res) => {
 //formData: text, title, image
 router.put('/:id', middleware, (req, res) => {
   try {
-    const { text, title, image } = req.body;
-    const sql = `UPDATE post SET text = '${text}', title='${title}' WHERE postId=${req.params.id} AND userId=${req.user.id}`;
+    const { text, title, price, image } = req.body;
+    const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' WHERE postId=${req.params.id} AND userId=${req.user.id}`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

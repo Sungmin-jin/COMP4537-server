@@ -3,6 +3,8 @@ const router = express.Router();
 const middleware = require('../../middleware/middleware');
 const { check, validationResult } = require('express-validator');
 const connection = require('../../config/db');
+const { route } = require('./user');
+const Blob = require('node-blob');
 
 //@route POST api/posts
 //formData: text, title, image
@@ -13,6 +15,7 @@ router.post(
     [
       check('text', 'Text is required').not().isEmpty(),
       check('title', 'Title is required').not().isEmpty(),
+      check('price', 'Price is require').not().isEmpty(),
     ],
   ],
   (req, res) => {
@@ -36,7 +39,8 @@ router.post(
           res.status(500).send('server error');
           console.log(err);
         }
-        res.json(result);
+        const insertId = result.insertId;
+        res.json({ insertId });
       });
     } catch (error) {
       console.log(error);
@@ -44,6 +48,48 @@ router.post(
     }
   }
 );
+
+// router.post('/image/:id', (req, res) => {
+//   try {
+//     // console.log(req.files);
+//     // console.log(req.body.image);
+//     // const blob = new Blob(req.files.image.data);
+//     const sql = `INSERT INTO image (postId, img) VALUES (?, ?)`;
+
+//     connection.query(
+//       sql,
+//       [req.params.id, req.files.image.data],
+//       (err, result) => {
+//         if (err) {
+//           console.log(err);
+//           throw err;
+//         }
+//         res.json(result);
+//       }
+//     );
+//     res.send('s');
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+router.get('/image', (req, res) => {
+  try {
+    const sql = `SELECT * FROM image`;
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(result[0]);
+      // res.json(result[0]);
+      // res.sendFile(result[0].img);
+      const blob = new Blob([result[0].img]);
+      res.writeHead(200, { 'Content-Type': blob.type });
+      blob.stream().pipe(res);
+    });
+  } catch (error) {}
+});
 
 //@route GET api/posts
 //@desc return all the posts

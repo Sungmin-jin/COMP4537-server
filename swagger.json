@@ -505,6 +505,9 @@
         },
         "price": {
           "type": "integer"
+        },
+        "image": {
+          "type": "string"
         }
       }
     },

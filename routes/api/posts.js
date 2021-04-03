@@ -3,10 +3,9 @@ const router = express.Router();
 const middleware = require('../../middleware/middleware');
 const { check, validationResult } = require('express-validator');
 const connection = require('../../config/db');
-const { route } = require('./user');
-const Blob = require('node-blob');
+const admin = require('../../admin.json');
 
-//@route POST api/posts
+//@route POST api/v1/posts
 //formData: text, title, image
 router.post(
   '/',
@@ -19,6 +18,7 @@ router.post(
     ],
   ],
   (req, res) => {
+    admin.POST['/api/v1/posts']++;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });
@@ -73,27 +73,28 @@ router.post(
 //   }
 // });
 
-router.get('/image', (req, res) => {
-  try {
-    const sql = `SELECT * FROM image`;
-    connection.query(sql, (err, result) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(result[0]);
-      // res.json(result[0]);
-      // res.sendFile(result[0].img);
-      const blob = new Blob([result[0].img]);
-      res.writeHead(200, { 'Content-Type': blob.type });
-      blob.stream().pipe(res);
-    });
-  } catch (error) {}
-});
+// router.get('/image', (req, res) => {
+//   try {
+//     const sql = `SELECT * FROM image`;
+//     connection.query(sql, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       console.log(result[0]);
+//       // res.json(result[0]);
+//       // res.sendFile(result[0].img);
+//       const blob = new Blob([result[0].img]);
+//       res.writeHead(200, { 'Content-Type': blob.type });
+//       blob.stream().pipe(res);
+//     });
+//   } catch (error) {}
+// });
 
-//@route GET api/posts
+//@route GET api/v1/posts
 //@desc return all the posts
 router.get('/', middleware, (req, res) => {
+  admin.GET['/api/v1/posts']++;
   try {
     const sql = 'SELECT * FROM post ORDER BY date desc';
     connection.query(sql, (err, result) => {
@@ -108,9 +109,10 @@ router.get('/', middleware, (req, res) => {
   }
 });
 
-//@route GET api/posts/:id
+//@route GET api/v1/posts/:id
 //@desc get a post by its id
 router.get('/:id', middleware, (req, res) => {
+  admin.GET['/api/v1/posts/:id']++;
   try {
     const sql = `SELECT * FROM post where postId =${req.params.id}`;
     // const sql = `SELECT * FROM post p LEFT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}
@@ -127,10 +129,11 @@ router.get('/:id', middleware, (req, res) => {
   }
 });
 
-//@route DELETE api/posts/:id
+//@route DELETE api/v1/posts/:id
 //@desc delete a post by its id and all the comments that belong to the post
 //only the owner of the post can delet it
 router.delete('/:id', middleware, (req, res) => {
+  admin.DELETE['/api/v1/posts/:id']++;
   try {
     //check if the user is the owner of the post
     let sql = `SELECT * FROM post where postId=${req.params.id} AND userId =${req.user.id}`;
@@ -162,10 +165,11 @@ router.delete('/:id', middleware, (req, res) => {
   }
 });
 
-//@route PUT api/posts/:id
+//@route PUT api/v1/posts/:id
 //@desc update a post by its id and only the owner of the post can update it
 //formData: text, title, image
 router.put('/:id', middleware, (req, res) => {
+  admin.PUT['/api/v1/posts/:id']++;
   try {
     const { text, title, price, image } = req.body;
     const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' WHERE postId=${req.params.id} AND userId=${req.user.id}`;

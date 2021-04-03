@@ -5,10 +5,10 @@ const connection = require('../../config/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const middleware = require('../../middleware/middleware');
+const admin = require('../../admin.json');
 
 //Register
-//route POST api/user
+//route POST api/v1/user
 //required form data: name, email, password
 router.post(
   '/',
@@ -21,6 +21,7 @@ router.post(
     ).isLength({ min: 6 }),
   ],
   async (req, res) => {
+    admin.POST['/api/v1/user']++;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });

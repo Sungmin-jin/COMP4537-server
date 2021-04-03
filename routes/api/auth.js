@@ -6,8 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const middleware = require('../../middleware/middleware');
+const admin = require('../../admin.json');
 
-//@route POST api/auth
+//@route POST api/v1/auth
 //@desc login user and return token
 //formData: email, password
 router.post(
@@ -17,6 +18,7 @@ router.post(
     check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
+    admin.POST['/api/v1/auth']++;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
@@ -64,9 +66,10 @@ router.post(
   }
 );
 
-//@route GET api/auth
+//@route GET api/v1/auth
 //@get the uesr by token
 router.get('/', middleware, async (req, res) => {
+  admin.GET['/api/v1/auth']++;
   try {
     const sql = `SELECT userId, name, email, date FROM user where userId = ${req.user.id}`;
     connection.query(sql, (err, user) => {

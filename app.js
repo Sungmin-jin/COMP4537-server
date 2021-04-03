@@ -1,9 +1,11 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
-const connection = require('./config/db');
-const cors = require('cors');
-
+const connection = require("./config/db");
+const cors = require("cors");
+// swagger api documentation
+const swaggerUI = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 //body parser
 app.use(
   express.json({
@@ -15,16 +17,18 @@ app.use(
 app.use(cors());
 
 //Define routes
-app.use('/api/v1/user', require('./routes/api/user'));
-app.use('/api/v1/auth', require('./routes/api/auth'));
-app.use('/api/v1/posts', require('./routes/api/posts'));
-app.use('/api/v1/comments', require('./routes/api/comments'));
-app.use('/api/v1/admin', require('./routes/api/admin'));
+app.use("/api/v1/user", require("./routes/api/user"));
+app.use("/api/v1/auth", require("./routes/api/auth"));
+app.use("/api/v1/posts", require("./routes/api/posts"));
+app.use("/api/v1/comments", require("./routes/api/comments"));
+app.use("/api/v1/admin", require("./routes/api/admin"));
+app.use("/api-docs", swaggerUI.serve);
+app.get("/api-docs", swaggerUI.setup(swaggerDocument));
 
-app.get('/deleteAll', (req, res) => {
-  let sql = 'DELETE FROM user';
+app.get("/deleteAll", (req, res) => {
+  let sql = "DELETE FROM user";
   connection.query(sql);
-  res.send('deleted');
+  res.send("deleted");
 });
 
 app.listen(PORT, () => {

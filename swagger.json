@@ -1,124 +1,647 @@
 {
-    "openapi": "3.0.3",
-    "info": {
-      "version": "1.0.0",
-      "title": "Sungmin Market API",
-      "description": "Find out how your APIs work",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
+  "swagger": "2.0",
+  "info": {
+    "description": "COMP4537 - BackEnd",
+    "version": "1.0.0",
+    "title": "Sungmin Market",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
     },
-    "host": "localhost:5000",
-    "basePath": "/api/",
-    "tags": [
-      {
-        "name": "User",
-        "description": "API for users in the system"
-      },
-      {
-        "name": "Post",
-        "description": "API for posts in the system"
-      },
-      {
-        "name": "Comment",
-        "description": "API for comments in the system"
-      }
-
-    ],
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "securityDefinitions": {
-        "ApiKeyAuth":{
-          "type": "apiKey",
-          "in": "headers",
-          "name": "authorization"
-        }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "User",
+      "description": "GET/POST for Posts"
     },
-    "paths": {
-      "/users/login": {
-        "post": {
-          "summary": "Login user",
-          "tags": [
-            "Users"
-          ],
-          "description": "Login user in system",
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "Login user",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "Login Success",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            },
-            "401":{
-              "description": "Login details are not valid!!"
-            },
-            "404":{
-              "description": "Email is not registered!"
-            },
-            "500":{
-              "description": "User login failed!!"
-            }
-          }
-        }
-      }
+    {
+      "name": "Auth",
+      "description": "GET/POST for User"
     },
-
-    "definitions": {
-
-      "User": {
-        "properties": {
-            "userId": {
-                "type": "string"
-            },
-            "email": {
-                "type": "string"
-            },
-            "password": {
-                "type": "string"
-            }
-        }
-      },
-      "userEmail":{
-        "properties": {
-          "email": {
+    {
+      "name": "Posts",
+      "description": "GET/POST for Posts"
+    },
+    {
+      "name": "Comment",
+      "description": "GET/POST for Posts"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/auth/": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get user information",
+        "description": "Input a valid token from authentication POST then insert it on the header with key name of x-auth-token to retrieve User data",
+        "operationId": "signinUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
             "type": "string"
           }
-        }
-      },
-      "Post": {
-          "properties": {
-              "postId": {
-                  "type": "int"
-              },
-              "postId": {
-                "type": "int"
-            }
-            ,"postId": {
-                "type": "int"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/getUserInformation"
             }
           }
+        }
+      },
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign in user",
+        "description": "Returns JWT Token",
+        "operationId": "signInUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Sign in user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/user/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Register User",
+        "description": "register user to system",
+        "operationId": "registerUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "register user form",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "register user",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/posts/": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get posts",
+        "description": "Input a valid token from authentication POST, then insert it on the header with key name of x-auth-token to retrieve User posts",
+        "operationId": "getPosts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/postPost"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Post posts",
+        "description": "Creating a post",
+        "operationId": "postPosts",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "post",
+            "in": "body",
+            "description": "required fields to create post",
+            "schema": {
+              "$ref": "#/definitions/postPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/postId"
+            }
+          }
+        }
+      }
+    },
+    "/posts/{postId}": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "get post by postId",
+        "description": "get post by postId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully got posts by its postId",
+            "schema": {
+              "$ref": "#/definitions/getPostByPostId"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Update post by postId",
+        "description": "Update post by postId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "postId to update",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "updatePostBody",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updatePostByPostId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully got posts by its postId",
+            "schema": {
+              "$ref": "#/definitions/getPostByPostId"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Delete post by postId",
+        "description": "Delete post by postId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "postId to update",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully got delete post found by the postId"
+          }
+        }
+      }
+    },
+    "/comments/": {
+      "post": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Post posts",
+        "description": "Creating a post",
+        "operationId": "postComments",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "create comment",
+            "in": "body",
+            "description": "required fields to create comment",
+            "schema": {
+              "$ref": "#/definitions/createComment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/resultPostComment"
+            }
+          }
+        }
+      }
+    },
+    "/comments/{commentId}": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "getting comment from postId",
+        "description": "getting commments from postId",
+        "operationId": "getComment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "JWT token created from POST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "refers to postId from x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/resultCommentByPost"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "updating comment by its unique Id ( comment Id )",
+        "description": "updating comments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "JWT token created from POST"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "text",
+            "in": "body",
+            "description": "requried fields for updating comment",
+            "schema": {
+              "$ref": "#/definitions/updateComment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/resultCommentByPost"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Deleting comment by its unique Id ( comment Id )",
+        "description": "Deleting comment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "type": "string",
+            "required": true,
+            "description": "JWT token created from POST"
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "getUserInformation": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "SignIn": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "registerUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "postPost": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    },
+    "createComment": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "postId": {
+          "type": "integer"
+        }
+      }
+    },
+    "getPostByPostId": {
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "img": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "isSold": {
+          "type": "boolean"
+        },
+        "price": {
+          "type": "integer"
+        }
+      }
+    },
+    "updatePostByPostId": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        }
+      }
+    },
+    "resultPostComment": {
+      "type": "object",
+      "properties": {
+        "fieldCount": {
+          "type": "integer"
+        },
+        "affectedRows": {
+          "type": "integer"
+        },
+        "insertId": {
+          "type": "integer"
+        },
+        "serverStatus": {
+          "type": "integer"
+        },
+        "warningCount": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "protocol41": {
+          "type": "integer"
+        },
+        "changedRows": {
+          "type": "integer"
+        }
+      }
+    },
+    "resultCommentByPost": {
+      "type": "object",
+      "properties": {
+        "commentId": {
+          "type": "integer"
+        },
+        "commentText": {
+          "type": "string"
+        },
+        "postId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "commentDate": {
+          "type": "string"
+        }
+      }
+    },
+    "postId": {
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "string"
+        }
+      }
+    },
+    "updateComment": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
       }
     }
   }
+}

@@ -1,24 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const middleware = require('../../middleware/middleware');
-const { check, validationResult } = require('express-validator');
-const connection = require('../../config/db');
-const admin = require('../../admin.json');
+const middleware = require("../../middleware/middleware");
+const { check, validationResult } = require("express-validator");
+const connection = require("../../config/db");
+const admin = require("../../admin.json");
 
 //@route POST api/v1/posts
 //formData: text, title, image
 router.post(
-  '/',
+  "/",
   [
     middleware,
     [
-      check('text', 'Text is required').not().isEmpty(),
-      check('title', 'Title is required').not().isEmpty(),
-      check('price', 'Price is require').not().isEmpty(),
+      check("text", "Text is required").not().isEmpty(),
+      check("title", "Title is required").not().isEmpty(),
+      check("price", "Price is require").not().isEmpty(),
     ],
   ],
   (req, res) => {
-    admin.POST['/api/v1/posts']++;
+    admin.POST["/api/v1/posts"]++;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });
@@ -29,14 +29,14 @@ router.post(
       console.log(req.files);
       const image = null;
       const sql = `INSERT INTO post (text, title, userId, price ${
-        image ? ',image' : ''
+        image ? ",image" : ""
       })
         VALUES ('${text}', '${title}', ${req.user.id}, ${price} ${
-        image ? ",'" + data + "'" : ''
+        image ? ",'" + data + "'" : ""
       })`;
       connection.query(sql, (err, result) => {
         if (err) {
-          res.status(500).send('server error');
+          res.status(500).send("server error");
           console.log(err);
         }
         const insertId = result.insertId;
@@ -44,7 +44,7 @@ router.post(
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -93,10 +93,10 @@ router.post(
 
 //@route GET api/v1/posts
 //@desc return all the posts
-router.get('/', middleware, (req, res) => {
-  admin.GET['/api/v1/posts']++;
+router.get("/", middleware, (req, res) => {
+  admin.GET["/api/v1/posts"]++;
   try {
-    const sql = 'SELECT * FROM post ORDER BY date desc';
+    const sql = "SELECT * FROM post ORDER BY date desc";
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);
@@ -105,14 +105,14 @@ router.get('/', middleware, (req, res) => {
       res.json(result);
     });
   } catch (error) {
-    res.status(500).send('server error');
+    res.status(500).send("server error");
   }
 });
 
 //@route GET api/v1/posts/:id
 //@desc get a post by its id
-router.get('/:id', middleware, (req, res) => {
-  admin.GET['/api/v1/posts/:id']++;
+router.get("/:id", middleware, (req, res) => {
+  admin.GET["/api/v1/posts/:id"]++;
   try {
     const sql = `SELECT * FROM post where postId =${req.params.id}`;
     // const sql = `SELECT * FROM post p LEFT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}
@@ -125,15 +125,15 @@ router.get('/:id', middleware, (req, res) => {
       res.json(result[0]);
     });
   } catch (error) {
-    res.status(500).send('server error');
+    res.status(500).send("server error");
   }
 });
 
 //@route DELETE api/v1/posts/:id
 //@desc delete a post by its id and all the comments that belong to the post
 //only the owner of the post can delet it
-router.delete('/:id', middleware, (req, res) => {
-  admin.DELETE['/api/v1/posts/:id']++;
+router.delete("/:id", middleware, (req, res) => {
+  admin.DELETE["/api/v1/posts/:id"]++;
   try {
     //check if the user is the owner of the post
     let sql = `SELECT * FROM post where postId=${req.params.id} AND userId =${req.user.id}`;
@@ -161,19 +161,20 @@ router.delete('/:id', middleware, (req, res) => {
       });
     });
   } catch (error) {
-    res.status(500).send('server error');
+    res.status(500).send("server error");
   }
 });
 
 //@route PUT api/v1/posts/:id
 //@desc update a post by its id and only the owner of the post can update it
 //formData: text, title, image
-router.put('/:id', middleware, (req, res) => {
-  admin.PUT['/api/v1/posts/:id']++;
+router.put("/:id", middleware, (req, res) => {
+  admin.PUT["/api/v1/posts/:id"]++;
   try {
-    const { text, title, price, image } = req.body;
+    const { text, title, price } = req.body;
     const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' WHERE postId=${req.params.id} AND userId=${req.user.id}`;
     connection.query(sql, (err, result) => {
+      console.log(sql);
       if (err) {
         console.log(err);
         throw err;
@@ -181,7 +182,7 @@ router.put('/:id', middleware, (req, res) => {
       res.json(result);
     });
   } catch (error) {
-    res.status(500).send('server error');
+    res.status(500).send("server error");
   }
 });
 

@@ -130,7 +130,9 @@ router.put('/:id', middleware, (req, res) => {
   admin.PUT['/api/v1/posts/:id']++;
   try {
     const { text, title, price, image } = req.body;
-    const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' WHERE postId=${req.params.id} AND userId=${req.user.id}`;
+    const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' ${
+      image ? ", img = '" + image + "'" : ''
+    } WHERE postId=${req.params.id} AND userId=${req.user.id}`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

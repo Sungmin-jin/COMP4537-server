@@ -24,15 +24,15 @@ router.post(
       return res.status(400).json({ msg: errors.array() });
     }
     try {
-      const { text, title, price } = req.body;
+      const { text, title, price, image } = req.body;
+      console.log(req.body);
       // const { image } = req.files.pic;
       console.log(req.files);
-      const image = null;
       const sql = `INSERT INTO post (text, title, userId, price ${
-        image ? ',image' : ''
+        image ? ',img' : ''
       })
         VALUES ('${text}', '${title}', ${req.user.id}, ${price} ${
-        image ? ",'" + data + "'" : ''
+        image ? ",'" + image + "'" : ''
       })`;
       connection.query(sql, (err, result) => {
         if (err) {
@@ -48,48 +48,6 @@ router.post(
     }
   }
 );
-
-// router.post('/image/:id', (req, res) => {
-//   try {
-//     // console.log(req.files);
-//     // console.log(req.body.image);
-//     // const blob = new Blob(req.files.image.data);
-//     const sql = `INSERT INTO image (postId, img) VALUES (?, ?)`;
-
-//     connection.query(
-//       sql,
-//       [req.params.id, req.files.image.data],
-//       (err, result) => {
-//         if (err) {
-//           console.log(err);
-//           throw err;
-//         }
-//         res.json(result);
-//       }
-//     );
-//     res.send('s');
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
-// router.get('/image', (req, res) => {
-//   try {
-//     const sql = `SELECT * FROM image`;
-//     connection.query(sql, (err, result) => {
-//       if (err) {
-//         console.log(err);
-//         return;
-//       }
-//       console.log(result[0]);
-//       // res.json(result[0]);
-//       // res.sendFile(result[0].img);
-//       const blob = new Blob([result[0].img]);
-//       res.writeHead(200, { 'Content-Type': blob.type });
-//       blob.stream().pipe(res);
-//     });
-//   } catch (error) {}
-// });
 
 //@route GET api/v1/posts
 //@desc return all the posts

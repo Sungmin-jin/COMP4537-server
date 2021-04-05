@@ -34,8 +34,7 @@ router.post(
 router.get('/:id', middleware, (req, res) => {
   admin.GET['/api/v1/comments/:id']++;
   try {
-    console.log('hello');
-    const sql = `SELECT * FROM comment WHERE postId = ${req.params.id}`;
+    const sql = `SELECT * FROM comment JOIN user on user.userId = comment.userId WHERE postId = ${req.params.id}`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

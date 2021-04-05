@@ -72,7 +72,7 @@ router.get('/', middleware, (req, res) => {
 router.get('/:id', middleware, (req, res) => {
   admin.GET['/api/v1/posts/:id']++;
   try {
-    const sql = `SELECT * FROM post where postId =${req.params.id}`;
+    const sql = `SELECT * FROM post LEFT JOIN user on user.userId = post.userId where postId =${req.params.id} UNION SELECT * FROM post RIGHT JOIN user on user.userId = post.userId`;
     // const sql = `SELECT * FROM post p LEFT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}
     // UNION SELECT c.commentText, c.commentId, c.userId AS commentUserId, c.commentDate FROM post p RIGHT JOIN comment c ON p.postId = c.postId WHERE p.postId=${req.params.id}`;
     connection.query(sql, (err, result) => {

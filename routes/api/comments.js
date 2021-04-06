@@ -34,7 +34,7 @@ router.post(
 router.get('/:id', middleware, (req, res) => {
   admin.GET['/api/v1/comments/:id']++;
   try {
-    const sql = `SELECT * FROM comment JOIN user on user.userId = comment.userId WHERE postId = ${req.params.id}`;
+    const sql = `SELECT * FROM comment JOIN user on user.userId = comment.userId WHERE postId = ${req.params.id}  ORDER BY commentDate desc`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);
@@ -69,11 +69,11 @@ router.put('/', middleware, (req, res) => {
 
 //@route DELETE api/v1/comments/:id
 //@desc delete the comment by its id and only the ownser of the comment can delete
-router.delete('/', middleware, (req, res) => {
+router.delete('/:id', middleware, (req, res) => {
   admin.DELETE['/api/v1/comments/:id']++;
   try {
-    const { id } = req.body;
-    const sql = `DELETE FROM comment WHERE commentId=${id} AND userId=${req.user.id}`;
+    const sql = `DELETE FROM comment WHERE commentId=${req.params.id} AND userId=${req.user.id}`;
+    console.log(sql);
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

@@ -67,6 +67,24 @@ router.get('/', middleware, (req, res) => {
   }
 });
 
+//@route GET api/v1/posts/user
+//@desc return all the posts of user
+router.get('/user', middleware, (req, res) => {
+  // admin.GET['/api/v1/posts']++;
+  try {
+    const sql = `SELECT * FROM post WHERE userId = ${req.user.id} ORDER BY date desc`;
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      res.json(result);
+    });
+  } catch (error) {
+    res.status(500).send('server error');
+  }
+});
+
 //@route GET api/v1/posts/:id
 //@desc get a post by its id
 router.get('/:id', middleware, (req, res) => {

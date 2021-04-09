@@ -146,9 +146,13 @@ router.delete('/:id', middleware, (req, res) => {
 //formData: text, title, image
 router.put('/:id', middleware, (req, res) => {
   admin.PUT['/api/v1/posts/:id']++;
+  console.log(req.body);
+  console.log(req.params.id);
   try {
-    const { text, title, price, image } = req.body;
-    const sql = `UPDATE post SET text = '${text}', title='${title}', price='${price}' ${
+    const { text, title, price, image, isSold } = req.body;
+    const sql = `UPDATE post SET isSold = ${
+      isSold ? 'true' : 'false'
+    }, text = '${text}', title='${title}', price='${price}' ${
       image ? ", img = '" + image + "'" : ''
     } WHERE postId=${req.params.id} AND userId=${req.user.id}`;
     connection.query(sql, (err, result) => {

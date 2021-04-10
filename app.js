@@ -19,7 +19,7 @@ app.use(
 app.use((req, res, next) => {
   res.setHeader(
     'Access-Control-Allow-Origin',
-    'https://comp4537-front-end.herokuapp.com/home'
+    'https://comp4537-front-end.herokuapp.com'
   );
 
   res.setHeader(

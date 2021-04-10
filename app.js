@@ -17,7 +17,10 @@ app.use(
 
 //default option
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'yourlinkhere.com');
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://comp4537-front-end.herokuapp.com/home'
+  );
 });
 
 //Define routes

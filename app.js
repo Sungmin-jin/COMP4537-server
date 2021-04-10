@@ -16,7 +16,9 @@ app.use(
 );
 
 //default option
-app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'yourlinkhere.com');
+});
 
 //Define routes
 app.use('/api/v1/user', require('./routes/api/user'));

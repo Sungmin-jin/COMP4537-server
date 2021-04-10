@@ -70,6 +70,7 @@ router.get('/', middleware, (req, res) => {
 //@route GET api/v1/posts/user
 //@desc return all the posts of user
 router.get('/user', middleware, (req, res) => {
+  admin.GET['/api/v1/posts/user']++;
   try {
     const sql = `SELECT * FROM post WHERE userId = ${req.user.id} ORDER BY date desc`;
     connection.query(sql, (err, result) => {

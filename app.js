@@ -17,10 +17,21 @@ app.use(
 
 //default option
 app.use((req, res, next) => {
-  res.header(
+  res.setHeader(
     'Access-Control-Allow-Origin',
     'https://comp4537-front-end.herokuapp.com/home'
   );
+
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, DELETE'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type'
+  );
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
 });
 
 //Define routes

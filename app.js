@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const connection = require('./config/db');
-const cors = require('cors');
 
 // swagger API documentation
 const swaggerUI = require('swagger-ui-express');

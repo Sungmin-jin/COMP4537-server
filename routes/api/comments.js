@@ -13,6 +13,13 @@ router.post(
   [middleware, [check('text', 'text is required')]],
   (req, res) => {
     admin.POST['/api/v1/comments']++;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).json({ msg: errors.array() });
+    }
+
     const { text, postId } = req.body;
     try {
       const sql = `INSERT INTO comment (commentText, postId, userId) VALUES ('${text}', ${postId}, ${req.user.id})`;
@@ -49,23 +56,34 @@ router.get('/:id', middleware, (req, res) => {
 
 //@route PUT api/v1/comments/:id
 //@desc update a comment by its id and only the owner of the comment can update the comment
-router.put('/', middleware, (req, res) => {
-  admin.PUT['/api/v1/comments/:id']++;
-  try {
-    const { text, id } = req.body;
-    const sql = `UPDATE comment SET commentText='${text}' WHERE commentId=${id} AND userId=${req.user.id}`;
-    console.log(sql);
-    connection.query(sql, (err, result) => {
-      if (err) {
-        console.log(err);
-        throw err;
-      }
-      res.json(result);
-    });
-  } catch (error) {
-    res.status(500).send('server error');
+router.put(
+  '/',
+  [middleware, [check('text', 'text is required')]],
+  (req, res) => {
+    admin.PUT['/api/v1/comments/:id']++;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).json({ msg: errors.array() });
+    }
+
+    try {
+      const { text, id } = req.body;
+      const sql = `UPDATE comment SET commentText='${text}' WHERE commentId=${id} AND userId=${req.user.id}`;
+      console.log(sql);
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        res.json(result);
+      });
+    } catch (error) {
+      res.status(500).send('server error');
+    }
   }
-});
+);
 
 //@route DELETE api/v1/comments/:id
 //@desc delete the comment by its id and only the ownser of the comment can delete

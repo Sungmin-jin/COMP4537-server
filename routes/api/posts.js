@@ -15,6 +15,7 @@ router.post(
       check('text', 'Text is required').not().isEmpty(),
       check('title', 'Title is required').not().isEmpty(),
       check('price', 'Price is require').not().isEmpty(),
+      check('image', 'Image is required').not().isEmpty(),
     ],
   ],
   (req, res) => {
@@ -144,27 +145,38 @@ router.delete('/:id', middleware, (req, res) => {
 //@route PUT api/v1/posts/:id
 //@desc update a post by its id and only the owner of the post can update it
 //formData: text, title, image
-router.put('/:id', middleware, (req, res) => {
-  admin.PUT['/api/v1/posts/:id']++;
-  console.log(req.body);
-  console.log(req.params.id);
-  try {
-    const { text, title, price, image, isSold } = req.body;
-    const sql = `UPDATE post SET isSold = ${
-      isSold ? 'true' : 'false'
-    }, text = '${text}', title='${title}', price='${price}' ${
-      image ? ", img = '" + image + "'" : ''
-    } WHERE postId=${req.params.id} AND userId=${req.user.id}`;
-    connection.query(sql, (err, result) => {
-      if (err) {
-        console.log(err);
-        throw err;
-      }
-      res.json(result);
-    });
-  } catch (error) {
-    res.status(500).send('server error');
+router.put(
+  '/:id',
+  [
+    middleware,
+    [
+      check('text', 'Text is required').not().isEmpty(),
+      check('title', 'Title is required').not().isEmpty(),
+      check('price', 'Price is require').not().isEmpty(),
+    ],
+  ],
+  (req, res) => {
+    admin.PUT['/api/v1/posts/:id']++;
+    console.log(req.body);
+    console.log(req.params.id);
+    try {
+      const { text, title, price, image, isSold } = req.body;
+      const sql = `UPDATE post SET isSold = ${
+        isSold ? 'true' : 'false'
+      }, text = '${text}', title='${title}', price='${price}' ${
+        image ? ", img = '" + image + "'" : ''
+      } WHERE postId=${req.params.id} AND userId=${req.user.id}`;
+      connection.query(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        res.json(result);
+      });
+    } catch (error) {
+      res.status(500).send('server error');
+    }
   }
-});
+);
 
 module.exports = router;

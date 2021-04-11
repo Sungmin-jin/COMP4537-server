@@ -7,6 +7,7 @@ const connection = require("./config/db");
 // swagger API documentation
 const swaggerUI = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
+// cors config to frontEnd url
 const corsOptions = {
   origin: "https://comp4537-front-end.herokuapp.com",
   credentials: true,

@@ -1,12 +1,12 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
-const connection = require('./config/db');
-const cors = require('cors');
+const connection = require("./config/db");
+const cors = require("cors");
 
 // swagger API documentation
-const swaggerUI = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerUI = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 //body parser
 app.use(
@@ -16,22 +16,38 @@ app.use(
 );
 
 //default option
-app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://comp4537-front-end.herokuapp.com"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 //Define routes
-app.use('/api/v1/user', require('./routes/api/user'));
-app.use('/api/v1/auth', require('./routes/api/auth'));
-app.use('/api/v1/posts', require('./routes/api/posts'));
-app.use('/api/v1/comments', require('./routes/api/comments'));
-app.use('/api/v1/admin', require('./routes/api/admin'));
-app.use('/api-docs', swaggerUI.serve);
+app.use("/api/v1/user", require("./routes/api/user"));
+app.use("/api/v1/auth", require("./routes/api/auth"));
+app.use("/api/v1/posts", require("./routes/api/posts"));
+app.use("/api/v1/comments", require("./routes/api/comments"));
+app.use("/api/v1/admin", require("./routes/api/admin"));
+app.use("/api-docs", swaggerUI.serve);
 
-app.get('/api-docs', swaggerUI.setup(swaggerDocument));
-app.get('/deleteAll', (req, res) => {
+app.get("/api-docs", swaggerUI.setup(swaggerDocument));
+app.get("/deleteAll", (req, res) => {
   // let sql = 'DELETE FROM comment';
   // connection.query(sql);
 
-  let sql = 'DELETE FROM post';
+  let sql = "DELETE FROM post";
   connection.query(sql);
 
   // let sql = 'DELETE FROM user';
@@ -39,7 +55,7 @@ app.get('/deleteAll', (req, res) => {
 
   // sql = 'DROP TABLE image';
   // connection.query(sql);
-  res.send('deleted');
+  res.send("deleted");
 });
 
 app.listen(PORT, () => {

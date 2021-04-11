@@ -8,7 +8,7 @@ const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const corsOptions = {
-  origin: ["https://comp4537-front-end.herokuapp.com", "http://localhost:3000"],
+  origin: "https://comp4537-front-end.herokuapp.com",
   credentials: true,
 };
 //body parser
@@ -20,10 +20,10 @@ app.use(
 app.use(cors(corsOptions));
 //default option
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", [
-    "https://comp4537-front-end.herokuapp.com",
-    "http://localhost:3000",
-  ]);
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://comp4537-front-end.herokuapp.com"
+  );
 
   res.setHeader(
     "Access-Control-Allow-Methods",

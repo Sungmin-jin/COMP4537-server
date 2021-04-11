@@ -15,7 +15,7 @@ app.use(
   })
 );
 
-//default option cors options
+//default option cors
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",

@@ -7,14 +7,17 @@ const cors = require("cors");
 // swagger API documentation
 const swaggerUI = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-
+const corsOptions = {
+  origin: "https://comp4537-front-end.herokuapp.com",
+  credential: true,
+};
 //body parser
 app.use(
   express.json({
     extended: false,
   })
 );
-
+app.use(cors(corsOptions));
 //default option
 app.use((req, res, next) => {
   res.setHeader(
@@ -33,7 +36,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
-
 //Define routes
 app.use("/api/v1/user", require("./routes/api/user"));
 app.use("/api/v1/auth", require("./routes/api/auth"));

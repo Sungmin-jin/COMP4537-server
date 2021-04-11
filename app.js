@@ -9,7 +9,7 @@ const swaggerUI = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const corsOptions = {
   origin: "https://comp4537-front-end.herokuapp.com",
-  credential: true,
+  credentials: true,
 };
 //body parser
 app.use(

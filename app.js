@@ -14,7 +14,7 @@ app.use(
     extended: false,
   })
 );
-// cors config to frontEnd
+// cors config to frontEnd URL
 const corsOptions = {
   origin: 'https://comp4537-front-end.herokuapp.com',
   optionsSuccessStatus: 200,

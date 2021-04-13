@@ -20,7 +20,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 //default option
 // app.use((req, res, next) => {
 //   res.setHeader(

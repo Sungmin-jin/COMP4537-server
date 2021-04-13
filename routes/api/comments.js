@@ -13,12 +13,13 @@ router.post(
   [middleware, [check('text', 'text is required')]],
   (req, res) => {
     admin.POST['/api/v1/comments']++;
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
       return res.status(400).json({ msg: errors.array() });
     }
+
+    console.log(req.body);
 
     const { text, postId } = req.body;
     try {

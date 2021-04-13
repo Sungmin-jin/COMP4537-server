@@ -8,17 +8,17 @@ const connection = require('./config/db');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-// cors config to frontEnd url
-const corsOptions = {
-  origin: 'https://comp4537-front-end.herokuapp.com',
-  optionsSuccessStatus: 200,
-};
 //body parser
 app.use(
   express.json({
     extended: false,
   })
 );
+// cors config to frontEnd url
+const corsOptions = {
+  origin: 'https://comp4537-front-end.herokuapp.com',
+  optionsSuccessStatus: 200,
+};
 
 app.use(cors(corsOptions));
 //default option

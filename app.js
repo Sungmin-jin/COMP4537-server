@@ -21,7 +21,7 @@ const corsOptions = {
 };
 
 app.use(cors());
-//default option
+//default options
 // app.use((req, res, next) => {
 //   res.setHeader(
 //     'Access-Control-Allow-Origin',

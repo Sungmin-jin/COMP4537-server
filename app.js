@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const connection = require('./config/db');
@@ -7,13 +8,18 @@ const connection = require('./config/db');
 const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
+// cors config to frontEnd url
+const corsOptions = {
+  origin: 'https://comp4537-front-end.herokuapp.com',
+  credentials: true,
+};
 //body parser
 app.use(
   express.json({
     extended: false,
   })
 );
-
+app.use(cors(corsOptions));
 //default option
 app.use((req, res, next) => {
   res.setHeader(
@@ -21,10 +27,7 @@ app.use((req, res, next) => {
     'https://comp4537-front-end.herokuapp.com'
   );
 
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, OPTIONS, PUT, DELETE'
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
@@ -32,7 +35,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
-
 //Define routes
 app.use('/api/v1/user', require('./routes/api/user'));
 app.use('/api/v1/auth', require('./routes/api/auth'));

@@ -9,35 +9,42 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 // cors config to frontEnd url
-const corsOptions = {
-  origin: 'https://comp4537-front-end.herokuapp.com',
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: 'https://comp4537-front-end.herokuapp.com',
+//   credentials: true,
+// };
 //body parser
 app.use(
   express.json({
     extended: false,
   })
 );
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 //default option
-app.use((req, res, next) => {
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    'https://comp4537-front-end.herokuapp.com'
-  );
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Access-Control-Allow-Origin',
+//     'https://comp4537-front-end.herokuapp.com'
+//   );
 
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE OPTIONS'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
+//   res.setHeader(
+//     'Access-Control-Allow-Methods',
+//     'GET, POST, PUT, DELETE OPTIONS'
+//   );
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept'
+//   );
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+
+app.use(
+  cors({
+    origin: 'https://comp4537-front-end.herokuapp.com',
+  })
+);
+
 //Define routes
 app.use('/api/v1/user', require('./routes/api/user'));
 app.use('/api/v1/auth', require('./routes/api/auth'));

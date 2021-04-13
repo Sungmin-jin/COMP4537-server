@@ -39,11 +39,7 @@ app.use(
 //   next();
 // });
 
-app.use(
-  cors({
-    origin: 'https://comp4537-front-end.herokuapp.com',
-  })
-);
+app.use(cors());
 
 //Define routes
 app.use('/api/v1/user', require('./routes/api/user'));

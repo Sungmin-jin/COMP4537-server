@@ -27,10 +27,7 @@ app.use((req, res, next) => {
     'https://comp4537-front-end.herokuapp.com'
   );
 
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, OPTIONS, PUT, DELETE'
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-Requested-With, Content-Type, Accept'

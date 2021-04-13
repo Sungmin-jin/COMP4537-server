@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type'
+    'Origin, X-Requested-With, Content-Type, Accept'
   );
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
@@ -46,7 +46,7 @@ app.get('/deleteAll', (req, res) => {
   // let sql = 'DELETE FROM comment';
   // connection.query(sql);
 
-  let sql = 'DELETE FROM post';
+  let sql = 'DELETE FROM post where postId = 384';
   connection.query(sql);
 
   // let sql = 'DELETE FROM user';

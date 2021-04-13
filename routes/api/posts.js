@@ -55,7 +55,7 @@ router.post(
 router.get('/', middleware, (req, res) => {
   admin.GET['/api/v1/posts']++;
   try {
-    const sql = 'SELECT * FROM post ORDER BY date desc';
+    const sql = 'SELECT * FROM post ORDER BY postDate desc';
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);
@@ -73,7 +73,7 @@ router.get('/', middleware, (req, res) => {
 router.get('/user', middleware, (req, res) => {
   admin.GET['/api/v1/posts/user']++;
   try {
-    const sql = `SELECT * FROM post WHERE userId = ${req.user.id} ORDER BY date desc`;
+    const sql = `SELECT * FROM post WHERE userId = ${req.user.id} ORDER BY postDate desc`;
     connection.query(sql, (err, result) => {
       if (err) {
         console.log(err);

@@ -14,24 +14,21 @@ app.use(
     extended: false,
   })
 );
-// cors config to frontEnd URL
-const corsOptions = {
-  origin: 'https://comp4537-front-end.herokuapp.com',
-  optionsSuccessStatus: 200,
-};
-
 app.use(cors());
-//default options
+//default option
 // app.use((req, res, next) => {
 //   res.setHeader(
 //     'Access-Control-Allow-Origin',
 //     'https://comp4537-front-end.herokuapp.com'
 //   );
 
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader(
+//     'Access-Control-Allow-Methods',
+//     'GET, POST, PUT, DELETE, OPTIONS'
+//   );
 //   res.setHeader(
 //     'Access-Control-Allow-Headers',
-//     'X-Requested-With, Content-Type, Accept'
+//     'Origin, X-Requested-With, Content-Type, Accept'
 //   );
 //   res.setHeader('Access-Control-Allow-Credentials', true);
 //   next();
@@ -49,7 +46,7 @@ app.get('/deleteAll', (req, res) => {
   // let sql = 'DELETE FROM comment';
   // connection.query(sql);
 
-  let sql = 'DELETE FROM post where postId = 384';
+  let sql = 'DELETE FROM post';
   connection.query(sql);
 
   // let sql = 'DELETE FROM user';

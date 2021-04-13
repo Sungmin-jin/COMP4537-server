@@ -49,7 +49,7 @@ app.get('/deleteAll', (req, res) => {
   // let sql = 'DELETE FROM comment';
   // connection.query(sql);
 
-  let sql = 'DELETE FROM post';
+  let sql = 'DELETE FROM post where postId = 384';
   connection.query(sql);
 
   // let sql = 'DELETE FROM user';

@@ -14,7 +14,7 @@ app.use(
     extended: false,
   })
 );
-app.use(cors());
+app.use(cors(corsOptions));
 //default option
 // app.use((req, res, next) => {
 //   res.setHeader(

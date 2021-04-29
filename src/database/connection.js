@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const config = require("config");
-const dbUrl = require("../../config/default.json");
+const urls = require("../../config/default.json");
+const dbUrl = urls.sqlURI;
+console.log(dbUrl);
 
 const sequelize = new Sequelize(dbUrl.database, dbUrl.user, dbUrl.password, {
   host: dbUrl.host,

@@ -69,7 +69,7 @@ router.post(
 //@desc return all the posts
 router.get("/", middleware, async (req, res) => {
   try {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({ order: [["postDate", "DESC"]] });
     res.json(posts);
     // const sql = "SELECT * FROM post ORDER BY postDate desc";
     // connection.query(sql, (err, result) => {
@@ -91,7 +91,8 @@ router.get("/", middleware, async (req, res) => {
 router.get("/user", middleware, async (req, res) => {
   try {
     const posts = await Post.findAll({
-      where: { userId: req.user.id, order: ["id", "DESC"] },
+      where: { userId: req.user.id },
+      order: [["userId", "DESC"]],
     });
     res.json(posts);
     // const sql = `SELECT * FROM post WHERE userId = ${req.user.id} ORDER BY postDate desc`;

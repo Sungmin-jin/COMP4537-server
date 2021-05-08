@@ -66,15 +66,13 @@ router.post(
   }
 );
 
-//return certain user
-router.get("/:userId", (res, req) => {
+router.get("/:id", async (req, res) => {
   try {
-    const user = User.findByPk(req.params.userId, {
+    const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ["password"] },
     });
     res.json(user);
   } catch (error) {
-    console.log(error);
     serverError(res);
   }
 });

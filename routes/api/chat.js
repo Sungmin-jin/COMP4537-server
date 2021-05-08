@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Chat = require("../../src/models/Chat");
+const ChatRoom = require("../../src/models/ChatRoom");
 const serverError = require("../../util/serverError");
 
 //new message
@@ -12,7 +13,15 @@ router.post("/", async (req, res) => {
       chatRoomId,
       senderId,
       chatText,
+      chatDate: new Date(Date.now()),
     });
+    await ChatRoom.update(
+      {
+        lastChat: chatText,
+        lastUpdate: newChat.chatDate,
+      },
+      { where: { chatRoomId: chatRoomId } }
+    );
     res.json(newChat);
   } catch (error) {
     console.log(error);

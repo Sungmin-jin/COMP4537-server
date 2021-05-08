@@ -5,6 +5,7 @@ module.exports = sequelize.define("chatRoom", {
     type: Sequelize.INTEGER(11),
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
   userOne: {
     type: Sequelize.INTEGER(11),
@@ -25,5 +26,13 @@ module.exports = sequelize.define("chatRoom", {
   chatRoomDate: {
     type: "TIMESTAMP",
     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+  },
+  lastChat: {
+    type: Sequelize.STRING("300"),
+    allowNull: true,
+  },
+  lastUpdate: {
+    type: "TIMESTAMP",
+    allowNull: true,
   },
 });

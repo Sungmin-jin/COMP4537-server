@@ -37,11 +37,6 @@ app.use("/api-docs", swaggerUI.serve);
 
 app.get("/api-docs", swaggerUI.setup(swaggerDocument));
 
-app.get("/", async (req, res) => {
-  const answer = await sequelize.query("delete from chat");
-  return res.send(answer);
-});
-
 let users = [];
 
 const addUser = (userId, socketId) => {

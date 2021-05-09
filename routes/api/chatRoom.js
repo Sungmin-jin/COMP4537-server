@@ -7,7 +7,7 @@ const sequelize = require("../../src/database/connection");
 const { Op } = require("sequelize");
 
 //new chatRoom
-router.post("/", async (req, res) => {
+router.post("/", middleware, async (req, res) => {
   try {
     const { userOne, userTwo, chatRoomId } = req.body;
     const newChatRoom = await ChatRoom.create({
@@ -55,7 +55,7 @@ router.get("/", middleware, async (req, res) => {
 });
 
 //get chatrooms of a user
-router.get("/:chatRoomId", async (req, res) => {
+router.get("/:chatRoomId", middleware, async (req, res) => {
   try {
     const userId = req.params.userId;
     // const chatRooms = await ChatRoom.findAll({

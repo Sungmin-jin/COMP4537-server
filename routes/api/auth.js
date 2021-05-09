@@ -56,45 +56,6 @@ router.post(
       console.log(error);
       serverError(res);
     }
-
-    // try {
-    //   //check user exists
-    //   let sql = `SELECT * FROM user WHERE email = '${email}'`;
-    //   connection.query(sql, async (error, user) => {
-    //     if (error) {
-    //       console.log(error);
-    //       res.status(500).send("Server Error");
-    //     }
-    //     // user does not exist
-    //     if (user.length === 0) {
-    //       res.status(400).json({ msg: [{ msg: "Invalid credentials" }] });
-    //     }
-    //     // user exist
-    //     else {
-    //       const isMatch = await bcrypt.compare(password, user[0].password);
-    //       if (!isMatch) {
-    //         res.status(400).json({ msg: [{ msg: "Invalid credentials" }] });
-    //       } else {
-    //         const payload = {
-    //           user: {
-    //             id: user[0].userId,
-    //           },
-    //         };
-    //         jwt.sign(
-    //           payload,
-    //           config.get("jwtSecret"),
-    //           { expiresIn: 360000 },
-    //           (err, token) => {
-    //             if (err) throw err;
-    //             res.json({ token });
-    //           }
-    //         );
-    //       }
-    //     }
-    //   });
-    // } catch (error) {
-    //   res.status(500).send("Server Error");
-    // }
   }
 );
 

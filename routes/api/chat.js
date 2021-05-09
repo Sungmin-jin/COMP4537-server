@@ -3,9 +3,10 @@ const router = express.Router();
 const Chat = require("../../src/models/Chat");
 const ChatRoom = require("../../src/models/ChatRoom");
 const serverError = require("../../util/serverError");
+const middleware = require("../../middleware/middleware");
 
 //new message
-router.post("/", async (req, res) => {
+router.post("/", middleware, async (req, res) => {
   try {
     const { chatRoomId, senderId, chatText } = req.body;
     console.log(req.body);
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
 });
 
 //get chats in room
-router.get("/:chatRoomId", async (req, res) => {
+router.get("/:chatRoomId", middleware, async (req, res) => {
   try {
     const chats = await Chat.findAll({
       where: { chatRoomId: req.params.chatRoomId },

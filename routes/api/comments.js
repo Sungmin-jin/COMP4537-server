@@ -26,14 +26,6 @@ router.post(
       const { text, postId } = req.body;
 
       const sql = `INSERT INTO comment (commentText, postId, userId) VALUES ('${text}', ${postId}, ${req.user.id})`;
-      // connection.query(sql, (err, result) => {
-      //   if (err) {
-      //     console.log(err);
-      //     throw err;
-      //   }
-      //   res.json(result);
-      // });
-
       const comment = await sequelize.query(sql);
 
       res.json({ commentId: comment[0] });
@@ -54,20 +46,8 @@ router.get("/:id", middleware, async (req, res) => {
     for (let comment of comments) {
       delete comment.password;
     }
-    // Comment.belongsTo(User, { foreignKey: "userId" });
-    // User.hasMany(Comment, { foreignKey: "userId" });
-    // const comments = await Comment.findAll({
-    //   where: { postId: req.params.id },
-    // });
 
     res.json(comments);
-    // connection.query(sql, (err, result) => {
-    //   if (err) {
-    //     console.log(err);
-    //     throw err;
-    //   }
-    //   res.json(result);
-    // });
   } catch (error) {
     console.log(error);
     serverError(res);
@@ -80,23 +60,8 @@ router.put(
   "/",
   [middleware, [check("text", "text is required")]],
   async (req, res) => {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   console.log(errors.array());
-    //   return res.status(400).json({ msg: errors.array() });
-    // }
-
     try {
       const { text, id } = req.body;
-      //   const sql = `UPDATE comment SET commentText='${text}' WHERE commentId=${id} AND userId=${req.user.id}`;
-      //   console.log(sql);
-      //   connection.query(sql, (err, result) => {
-      //     if (err) {
-      //       console.log(err);
-      //       throw err;
-      //     }
-      //     res.json(result);
-      //   });
       const comment = await Comment.findByPk(id);
       if (!comment) {
         return res.status(404).json({ msg: "comment not found" });

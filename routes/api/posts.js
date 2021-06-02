@@ -27,13 +27,14 @@ router.post(
       return res.status(400).json({ msg: errors.array() });
     }
     try {
-      const { text, title, price, image } = req.body;
+      const { text, title, price, image, date } = req.body;
       const post = await Post.create({
         text,
         title,
         price,
         userId: req.user.id,
         img: image,
+        postDate: date,
       });
       res.json(post);
     } catch (error) {
@@ -62,7 +63,7 @@ router.get("/user", middleware, async (req, res) => {
   try {
     const posts = await Post.findAll({
       where: { userId: req.user.id },
-      order: [["userId", "DESC"]],
+      order: [["postDate", "DESC"]],
     });
     res.json(posts);
   } catch (error) {

@@ -23,9 +23,9 @@ router.post(
     }
 
     try {
-      const { text, postId } = req.body;
+      const { text, postId, date } = req.body;
 
-      const sql = `INSERT INTO comment (commentText, postId, userId) VALUES ('${text}', ${postId}, ${req.user.id})`;
+      const sql = `INSERT INTO comment (commentText, postId, userId, commentDate) VALUES ('${text}', ${postId}, ${req.user.id}, '${date}')`;
       const comment = await sequelize.query(sql);
 
       res.json({ commentId: comment[0] });

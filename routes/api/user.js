@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -45,6 +46,9 @@ router.post(
       email,
       name,
       password: bcryptPassword,
+    }).catch((err) => {
+      console.log(err);
+      return serverError(res);
     });
     const payload = {
       user: {
@@ -65,16 +69,5 @@ router.post(
     );
   }
 );
-
-router.get("/:id", async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ["password"] },
-    });
-    res.json(user);
-  } catch (error) {
-    serverError(res);
-  }
-});
 
 module.exports = router;

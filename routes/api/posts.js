@@ -4,6 +4,7 @@ const middleware = require("../../middleware/middleware");
 const { check, validationResult } = require("express-validator");
 
 const Post = require("../../src/models/Post");
+const Comment = require("../../src/models/Comment");
 const serverError = require("../../util/serverError");
 const sequelize = require("../../src/database/connection");
 
@@ -90,6 +91,7 @@ router.get("/:id", middleware, async (req, res) => {
 //only the owner of the post can delet it
 router.delete("/:id", middleware, async (req, res) => {
   try {
+    console.log(req.params.id);
     const post = await Post.findByPk(req.params.id);
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -97,8 +99,13 @@ router.delete("/:id", middleware, async (req, res) => {
     if (post.userId !== req.user.id) {
       return res.status(403).json({ msg: "forbidden request" });
     }
+    await Comment.destroy({
+      where: {
+        postId: req.params.id,
+      },
+    });
 
-    Post.destroy({
+    await Post.destroy({
       where: {
         postId: req.params.id,
       },

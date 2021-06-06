@@ -19,7 +19,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
-      return res.status(400).json({ msg: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     try {
@@ -64,11 +64,11 @@ router.put(
       const { text, id } = req.body;
       const comment = await Comment.findByPk(id);
       if (!comment) {
-        return res.status(404).json({ msg: "comment not found" });
+        return res.status(404).json({ errors: [{ msg: "comment not found" }] });
       }
 
       if (comment.userId !== req.user.id) {
-        return res.status(403).json({ msg: "forbidden request" });
+        return res.status(403).json({ errors: [{ msg: "forbidden request" }] });
       }
 
       const updatedComment = await Comment.update(
@@ -92,10 +92,10 @@ router.delete("/:id", middleware, async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id);
     if (!comment) {
-      return res.status(404).json({ msg: "post not found" });
+      return res.status(404).json({ errors: [{ msg: "post not found" }] });
     }
     if (comment.userId != req.user.id) {
-      return res.status(403).json({ msg: "forbidden request" });
+      return res.status(403).json({ errors: [{ msg: "forbidden request" }] });
     }
 
     Comment.destroy({

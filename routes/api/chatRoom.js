@@ -47,7 +47,6 @@ router.get("/", middleware, async (req, res) => {
     where userOne = ${req.user.id} OR userTwo = ${req.user.id}`;
     const chatRooms = await sequelize.query(sql);
     res.json(chatRooms[0]);
-    console.log(chatRooms[0]);
   } catch (error) {
     console.log(error);
     serverError(res);
@@ -57,10 +56,6 @@ router.get("/", middleware, async (req, res) => {
 //get chatrooms of a user
 router.get("/:chatRoomId", middleware, async (req, res) => {
   try {
-    const userId = req.params.userId;
-    // const chatRooms = await ChatRoom.findAll({
-    //   where: { [Op.or]: [{ userOne: userId }, { userTwo: userId }] },
-    // });
     const chatRooms = await ChatRoom.findByPk(req.params.chatRoomId);
     res.json(chatRooms);
   } catch (error) {

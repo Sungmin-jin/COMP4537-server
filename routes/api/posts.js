@@ -53,7 +53,6 @@ router.get("/", middleware, async (req, res) => {
   } catch (error) {
     console.log(error);
     serverError(res);
-    // res.status(500).send("server error");
   }
 });
 
@@ -95,10 +94,10 @@ router.delete("/:id", middleware, async (req, res) => {
     console.log(req.params.id);
     const post = await Post.findByPk(req.params.id);
     if (!post) {
-      return res.status(404).json({ msg: "Post not found" });
+      return res.status(404).json({ errors: [{ msg: "Post not found" }] });
     }
     if (post.userId !== req.user.id) {
-      return res.status(403).json({ msg: "forbidden request" });
+      return res.status(403).json({ errors: [{ msg: "forbidden request" }] });
     }
     await Comment.destroy({
       where: {
@@ -138,10 +137,10 @@ router.put(
 
       const post = await Post.findByPk(req.params.id);
       if (!post) {
-        return res.status(404).json({ msg: "post not found" });
+        return res.status(404).json({ errors: [{ msg: "post not found" }] });
       }
       if (post.userId !== req.user.id) {
-        return res.status(403).json({ msg: "forbidden request" });
+        return res.status(403).json({ errors: [{ msg: "forbidden request" }] });
       }
 
       const updatedPost = await Post.update(

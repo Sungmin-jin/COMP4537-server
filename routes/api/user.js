@@ -70,4 +70,17 @@ router.post(
   }
 );
 
+//return certain user
+router.get("/:userId", (req, res) => {
+  try {
+    const user = User.findByPk(req.params.userId, {
+      attributes: { exclude: ["password"] },
+    });
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    serverError(res);
+  }
+});
+
 module.exports = router;

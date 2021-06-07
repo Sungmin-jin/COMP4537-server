@@ -71,9 +71,9 @@ router.post(
 );
 
 //return certain user
-router.get("/:userId", (req, res) => {
+router.get("/:userId", async (req, res) => {
   try {
-    const user = User.findByPk(req.params.userId, {
+    const user = await User.findByPk(req.params.userId, {
       attributes: { exclude: ["password"] },
     });
     res.json(user);
